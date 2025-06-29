@@ -1,0 +1,35 @@
+{
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Native Debug (ejemplos ON)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "GLCORE_EXAMPLES": "ON",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+      }
+    },
+    {
+      "name": "opencl",
+      "displayName": "MinGW OpenCL (ejemplos ON)",
+      "inherits": ["default"],
+      "generator": "MinGW Makefiles",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
+        "GLCORE_EXAMPLES": "ON" 
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "opencl",
+      "displayName": "Build OpenCL",
+      "configurePreset": "opencl"
+    }
+  ]
+}

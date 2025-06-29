@@ -1,0 +1,11 @@
+
+
+.cache/
+
+*build*/
+
+.idea/
+*.DS_Store
+
+.vscode/
+CMakePresets.json
