@@ -2,7 +2,7 @@
 
 Este repositorio implementa una versión gráfica e interactiva del Juego de la Vida de Conway usando OpenCL y OpenGL. Permite alternar la simulación entre CPU y GPU, cambiar en tiempo real distintos parámetros de la simulación y mostrar celdas con distintos efectos visuales.
 <p align="center">
-  <img src="GameOfLife.gif" width="640" alt="Demostración del Juego de la Vida" />
+  <img src="GameOfLife.gif" width="500" alt="Demostración del Juego de la Vida" />
 </p>
 
 > Este proyecto está basado en la librería glcore, una biblioteca OpenGL basada en LearnOpenGL.
