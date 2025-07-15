@@ -13,6 +13,12 @@
 [submodule "extern/glew"]
 	path = extern/glew
 	url = https://github.com/nigels-com/glew.git
+[submodule "extern/OpenCL-Headers"]
+	path = extern/OpenCL-Headers
+	url = https://github.com/KhronosGroup/OpenCL-Headers
+[submodule "extern/OpenCL-ICD-Loader"]
+	path = extern/OpenCL-ICD-Loader
+	url = https://github.com/KhronosGroup/OpenCL-ICD-Loader
 [submodule "extern/OpenCL-CLHPP"]
 	path = extern/OpenCL-CLHPP
-	url = https://github.com/nigels-com/glew.git
+	url = https://github.com/KhronosGroup/OpenCL-CLHPP.git
