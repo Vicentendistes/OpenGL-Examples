@@ -59,7 +59,7 @@ class MyApp : public App {
 
 public:
   MyApp()
-    : App(3,3,800,600,"Conway Opencl")
+    : App(3,3,1536,864,"Conway Opencl")
     , cellW(2.0f/COLS)
     , cellH(2.0f/ROWS)
     , buffCPU(nullptr)
