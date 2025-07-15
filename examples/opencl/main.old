@@ -13,8 +13,8 @@
 #include <CL/cl.h>
 #include <CL/cl_gl.h>
 #endif
-#include <glcore/core.h>
-#include <glcore/camera.h>
+#include <OpenGLLib/core.h>
+#include <OpenGLLib/camera.h>
 #include <cstddef>
 #include <fstream>
 #include <iostream>

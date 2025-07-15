@@ -1,8 +1,10 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
-#include "glcore/texture.h"
+#include <glad/glad.h>   // Provide GLuint, GLenum, etc.
+#include "OpenGLLib/texture.h"
 #include <vector>
+#include <glm/glm.hpp>
 
 class Buffer {
 public:
@@ -60,4 +62,33 @@ public:
 private:
   std::vector<Texture *> textures_;
 };
-#endif // _BUFFER_H_
+
+class InstanceBuffer : public VertexBuffer {
+public:
+    // Solo vertices (2 floats por vértice) y offsets
+    InstanceBuffer(const std::vector<float>& vertices,
+                   const std::vector<glm::vec2>& offsets);
+    InstanceBuffer(InstanceBuffer&&) noexcept;
+    InstanceBuffer& operator=(InstanceBuffer&&) noexcept;
+    ~InstanceBuffer() override;
+
+    void build() override;
+    void draw() override;
+
+    // Para actualizar offsets en tiempo de ejecución
+    void setInstanceData(const std::vector<glm::vec2>& offsets);
+    void setStateData(const unsigned char* states, size_t count);
+    
+    GLuint getStateVBO() const { 
+        return stateVBO_; 
+    }
+protected:
+    void bind() override;
+
+private:
+    unsigned int instanceVBO_{0};
+    unsigned int stateVBO_{0};    
+    std::vector<glm::vec2> offsets_;
+};
+
+#endif

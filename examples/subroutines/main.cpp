@@ -1,6 +1,6 @@
-#include <glcore/app.h>
-#include <glcore/buffer.h>
-#include <glcore/shader.h>
+#include <OpenGLLib/app.h>
+#include <OpenGLLib/buffer.h>
+#include <OpenGLLib/shader.h>
 #include <glm/glm.hpp>
 #include <memory>
 

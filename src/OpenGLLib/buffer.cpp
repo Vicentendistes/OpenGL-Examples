@@ -1,6 +1,7 @@
 #include <glad/glad.h>
-#include <glcore/buffer.h>
+#include <OpenGLLib/buffer.h>
 #include <utility>
+#include <iostream>
 
 using vec = std::vector<float>;
 using uvec = std::vector<unsigned int>;
@@ -152,4 +153,110 @@ void TextureBuffer::draw() {
   }
   bind();
   glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
+}
+
+
+
+/******************* INSTANCE BUFFER **************************************/
+
+InstanceBuffer::InstanceBuffer(const std::vector<float>& verts,
+                               const std::vector<glm::vec2>& offs)
+  : VertexBuffer(verts),
+    offsets_(offs),
+    instanceVBO_(0),
+    stateVBO_(0)
+{}
+
+InstanceBuffer::InstanceBuffer(InstanceBuffer&& o) noexcept
+  : VertexBuffer(std::move(o)),
+    offsets_(std::move(o.offsets_)),
+    instanceVBO_(o.instanceVBO_),
+    stateVBO_(o.stateVBO_)
+{
+  o.instanceVBO_ = o.stateVBO_ = 0;
+}
+
+InstanceBuffer& InstanceBuffer::operator=(InstanceBuffer&& o) noexcept {
+  if (this != &o) {
+    if (instanceVBO_) glDeleteBuffers(1, &instanceVBO_);
+    if (stateVBO_)    glDeleteBuffers(1, &stateVBO_);
+    VertexBuffer::operator=(std::move(o));
+    offsets_    = std::move(o.offsets_);
+    instanceVBO_= o.instanceVBO_;
+    stateVBO_   = o.stateVBO_;
+    o.instanceVBO_ = o.stateVBO_ = 0;
+  }
+  return *this;
+}
+
+InstanceBuffer::~InstanceBuffer() {
+  if (instanceVBO_) glDeleteBuffers(1, &instanceVBO_);
+  if (stateVBO_)    glDeleteBuffers(1, &stateVBO_);
+}
+
+// build sólo una vez (vertices + offsets + reserva stateVBO_)
+void InstanceBuffer::build() {
+  // 1) vértices
+  bind();  
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+  glBufferData(GL_ARRAY_BUFFER,
+               vertices_.size()*sizeof(float),
+               vertices_.data(),
+               GL_STATIC_DRAW);
+  // atributo 0 = vec2 pos
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,
+                        2*sizeof(float),(void*)0);
+
+  // 2) offsets
+  glGenBuffers(1,&instanceVBO_);
+  glBindBuffer(GL_ARRAY_BUFFER, instanceVBO_);
+  glBufferData(GL_ARRAY_BUFFER,
+               offsets_.size()*sizeof(glm::vec2),
+               offsets_.data(),
+               GL_STATIC_DRAW);
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,
+                        sizeof(glm::vec2),(void*)0);
+  glVertexAttribDivisor(1,1);
+
+  // 3) estados (reserva sólo espacio, datos vendrán por setStateData)
+  glGenBuffers(1,&stateVBO_);
+  glBindBuffer(GL_ARRAY_BUFFER, stateVBO_);
+  glBufferData(GL_ARRAY_BUFFER,
+               offsets_.size()*sizeof(uint8_t),
+               nullptr,
+               GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(2);
+  // IPointer para enteros:
+  glVertexAttribIPointer(2,1,GL_UNSIGNED_BYTE,
+                         sizeof(uint8_t),(void*)0);
+  glVertexAttribDivisor(2,1);
+
+  // unbind final
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER,0);
+}
+
+// Actualizar dinámicamente los estados de la grilla
+void InstanceBuffer::setStateData(const unsigned char* states, size_t count) {
+  glBindBuffer(GL_ARRAY_BUFFER, stateVBO_);
+  glBufferSubData(GL_ARRAY_BUFFER,
+                  0,
+                  count * sizeof(uint8_t),
+                  states);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+// draw
+void InstanceBuffer::draw() {
+  bind();
+  glDrawArraysInstanced(GL_TRIANGLES,
+                        0, 6,
+                        static_cast<GLsizei>(offsets_.size()));
+  glBindVertexArray(0);
+}
+
+void InstanceBuffer::bind() {
+  glBindVertexArray(vao_);
 }

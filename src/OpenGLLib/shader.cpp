@@ -1,5 +1,5 @@
 #include "glm/gtc/type_ptr.hpp"
-#include <glcore/shader.h>
+#include <OpenGLLib/shader.h>
 
 #include <fstream>
 #include <iostream>

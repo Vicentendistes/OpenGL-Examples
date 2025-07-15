@@ -1,7 +1,8 @@
-#include "glcore/app.h"
+#include "OpenGLLib/app.h"
 #include "imgui.h"
-#include <glcore/core.h>
+#include <OpenGLLib/core.h>
 #include <iostream>
+#define GL_COMPUTE_SHADER
 #ifndef GL_COMPUTE_SHADER
 int main (int argc, char *argv[]) {
   std::cout << "Not supported!\n";
@@ -9,7 +10,7 @@ int main (int argc, char *argv[]) {
 }
 #else
 #include <memory>
-#include <glcore/camera.h>
+#include <OpenGLLib/camera.h>
 #include <glm/ext.hpp>
 
 #define RANDOM ((float)rand() / (float)(RAND_MAX))

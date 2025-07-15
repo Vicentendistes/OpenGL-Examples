@@ -1,5 +1,5 @@
 #include "imgui.h"
-#include <glcore/app.h>
+#include <OpenGLLib/app.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
@@ -68,17 +68,40 @@ App::App(unsigned int glmajor, unsigned int glminor, int width, int height,
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
-  if (width <= 0 || height <= 0)
-    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
-  window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-  if (window == NULL) {
-    std::cerr << "Failed to create GLFW window" << std::endl;
+  GLFWmonitor*   monitor = NULL;
+  int            w = width, h = height;
+
+  // Si pides “tamaño <=0”, arrancamos en fullscreen
+  if (width <= 0 || height <= 0) {
+    monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    w = mode->width;
+    h = mode->height;
+
+    // Opcional: igualar bits y refresco
+    glfwWindowHint(GLFW_RED_BITS,    mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS,  mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS,   mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+  }
+
+  window = glfwCreateWindow(w, h, title.c_str(), monitor, NULL);
+
+  if (!window) {
+    std::cerr << "Failed to create GLFW window\n";
     glfwTerminate();
     exit(-1);
   }
+  glfwMakeContextCurrent(window);
+  // deshabilita V-Sync y permite render loop sin límite de fps
+  glfwSwapInterval(0);
+  
+  primaryMonitor_ = glfwGetPrimaryMonitor();
+  vidMode_        = glfwGetVideoMode(primaryMonitor_);
+  glfwGetWindowPos(window, &winedX_, &winedY_);
+  glfwGetWindowSize(window, &winedW_, &winedH_);
   glfwGetWindowSize(window, &width_, &height_);
 
-  glfwMakeContextCurrent(window);
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cerr << "Failed to initialize GLAD" << std::endl;
     glfwTerminate();
@@ -119,7 +142,7 @@ bool App::isFinished() { return glfwWindowShouldClose(window); }
 
 void App::render() {
   glViewport(0, 0, width_, height_);
-  glClearColor(.0f, .0f, .0f, 1.f);
+  glClearColor(.2f, .2f, .2f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -153,4 +176,29 @@ void App::run() {
     glfwPollEvents();
   }
   current = nullptr;
+}
+
+void App::toggleFullscreen() {
+  if (!isFullscreen_) {
+    // vamos a fullscreen
+
+    glfwSetWindowMonitor(
+      window,
+      primaryMonitor_,
+      0, 0,
+      vidMode_->width,
+      vidMode_->height,
+      vidMode_->refreshRate
+    );
+  } else {
+    // volvemos a windowed
+    glfwSetWindowMonitor(
+      window,
+      NULL,
+      winedX_, winedY_,
+      winedW_, winedH_,
+      0
+    );
+  }
+  isFullscreen_ = !isFullscreen_;
 }

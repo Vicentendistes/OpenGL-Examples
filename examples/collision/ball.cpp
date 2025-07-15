@@ -1,5 +1,5 @@
 #include "ball.h"
-#include "glcore/buffer.h"
+#include "OpenGLLib/buffer.h"
 #include "glm/ext/matrix_transform.hpp"
 #include <vector>
 #include <memory>

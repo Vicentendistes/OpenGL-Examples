@@ -1,10 +1,10 @@
 #include "ball.h"
-#include "glcore/camera.h"
-#include "glcore/shader.h"
+#include "OpenGLLib/camera.h"
+#include "OpenGLLib/shader.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include <cstdlib>
-#include <glcore/app.h>
-#include <glcore/buffer.h>
+#include <OpenGLLib/app.h>
+#include <OpenGLLib/buffer.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include <vector>

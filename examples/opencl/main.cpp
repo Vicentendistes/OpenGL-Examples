@@ -24,8 +24,8 @@
 #error "Unsupported platform"
 #endif
 
-#include "glcore/camera.h"
-#include "glcore/core.h"
+#include "OpenGLLib/camera.h"
+#include "OpenGLLib/core.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

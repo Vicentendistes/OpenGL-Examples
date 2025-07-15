@@ -1,4 +1,4 @@
-#include <glcore/core.h>
+#include <OpenGLLib/core.h>
 #include <random>
 #include <memory>
 #include <iostream>

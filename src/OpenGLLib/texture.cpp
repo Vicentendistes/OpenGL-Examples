@@ -1,6 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <glad/glad.h>
-#include <glcore/texture.h>
+#include <OpenGLLib/texture.h>
 #include <iostream>
 #include <stb_image.h>
 

@@ -1,7 +1,7 @@
 #include <cstdlib>
-#include <glcore/camera.h>
-#include <glcore/core.h>
-#include <glcore/texture.h>
+#include <OpenGLLib/camera.h>
+#include <OpenGLLib/core.h>
+#include <OpenGLLib/texture.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 

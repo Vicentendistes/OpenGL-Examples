@@ -5,10 +5,10 @@
       "name": "default",
       "displayName": "Native Debug (ejemplos ON)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "GLCORE_EXAMPLES": "ON",
+        "EXAMPLES": "ON",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
       }
     },
@@ -17,11 +17,11 @@
       "displayName": "MinGW OpenCL (ejemplos ON)",
       "inherits": ["default"],
       "generator": "MinGW Makefiles",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
         "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
-        "GLCORE_EXAMPLES": "ON" 
+        "EXAMPLES": "ON" 
       }
     }
   ],

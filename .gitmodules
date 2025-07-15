@@ -13,3 +13,6 @@
 [submodule "extern/glew"]
 	path = extern/glew
 	url = https://github.com/nigels-com/glew.git
+[submodule "extern/OpenCL-CLHPP"]
+	path = extern/OpenCL-CLHPP
+	url = https://github.com/nigels-com/glew.git
