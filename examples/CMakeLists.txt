@@ -9,23 +9,16 @@ function(add_example name)
 endfunction()
 
 
-# add_example(collision)
-# add_example(subroutines)
-# add_example(textures)
-# add_example(compute)
-# add_example(boids)
- add_example(grid)
+
+add_example(grid)
 find_package(OpenCL)
 if(OpenCL_FOUND)
 message("OpenCL found")
   add_example(grid_opencl)
-  #add_example(opencl)
   target_link_libraries(grid_opencl PRIVATE OpenCL::OpenCL)
   target_compile_definitions(grid_opencl
     PRIVATE
       CL_TARGET_OPENCL_VERSION=300
   )
-  #target_link_libraries(opencl PRIVATE OpenCL::OpenCL)
   set(CL_VERSION ${OpenCL_VERSION_MAJOR}${OpenCL_VERSION_MINOR}0)
-  # target_compile_definitions(opencl PRIVATE TEST=${CL_VERSION})
 endif()
